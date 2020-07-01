@@ -4,8 +4,12 @@ const express = require('express');
 var bodyParser = require('body-parser');
 var helmet = require('helmet')
 var compression = require('compression');
+var session = require('express-session')
+var FileStore = require('session-file-store')(session);
+
 // 프로젝트 라우터
 var topicRouter = require('./routes/router')
+var authRouter = require('./routes/auth')
 var indexRouter = require('./routes/index')
 
 var fs = require('fs');
@@ -17,6 +21,18 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(compression()); //압축을 위한 솔루션
 app.use(helmet()); //보안을 위한 솔루션 
 
+//fileStore 에 session 저장
+
+var fileStoreOptions = {};
+ 
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,            //기본값으로 세팅 ,추후 필요하면 변경 
+    saveUninitialized: true,  //기본값으로 세팅 ,추후 필요하면 변경 
+    store: new FileStore(fileStoreOptions)
+}));
+
+
 //미들웨어 만들어 사용하기 
 app.get('*',function(req,res, next){
     fs.readdir('./data', function(err, filelist){
@@ -27,6 +43,7 @@ app.get('*',function(req,res, next){
 //public 폴더를 정적폴더로 지정 
 app.use(express.static('public'));
 app.use('/topic', topicRouter);
+app.use('/auth', authRouter);
 app.use('/', indexRouter);
 
 
