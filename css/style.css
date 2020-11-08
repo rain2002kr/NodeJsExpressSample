@@ -1,0 +1,17 @@
+a{
+   text-decoration: none;
+}
+
+h1 {
+    color:yellow;
+    background-color: yellow;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    
+}
+li{
+
+}
