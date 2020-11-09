@@ -7,5 +7,14 @@ services:
     networks:
       - compose-networks
 
+  mongodb:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - .:/data/db
+    networks:
+      - compose-networks
+
 networks:
   compose-networks:
